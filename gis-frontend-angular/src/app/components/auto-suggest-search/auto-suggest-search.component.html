@@ -1,0 +1,49 @@
+<div class="hederbox">
+    <div class="mmigeo-panel">
+        <div class="select_search">
+            <select name="city" class="rounded-inputs20 select-select" (change)="onDropdownChange($event)" *ngIf="!hideDropdown">
+                <option *ngFor="let option of options" [value]="option.id">{{option.name}}</option>
+            </select>
+            
+            <!-- Keyword Search -->
+            <div id="searchbar" class="GeosearchBox suggestion_list_visible" *ngIf="hideDropdown || selectDropdown == 1">
+                <div class="bar bar_no_bottom">
+                    <input type="text" id="auto" name="auto" class="input_search ng-pristine ng-valid ng-empty ng-touched as-input" 
+                           [(ngModel)]="selectedPlace" placeholder="Search places..." autocomplete="off" (keyup)="onKey($event)">
+                    <button *ngIf="(closeButton|async)===1" (click)="closeMarker(0)" id="serachClean" class="clean_search"></button>
+                    
+                    <!-- Search Results -->
+                    <div class="as-results" id="as-results-auto">
+                        <ul class="as-list" style="position: relative; margin-top: 0px; width: 312px;">
+                            <ng-container *ngFor="let obj of (suggestion | async); let i = index">
+                                <li index="1" class="as-result-item" id="as-result-item-{{i}}" (click)="navigateToPlace(obj,i)">
+                                    <span class="place_city">{{ obj.showPlaceName }}</span>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </div>
+                    
+                    <!-- No Results Message -->
+                    <div class="as-results" id="as-results-auto" *ngIf="(nocontentFlag|async)">
+                        <ul class="as-list" style="position: relative; margin-top: 0px; width: 312px;">
+                            <li class="as-result-item" id="as-result-item-i">
+                                <span class="place_city">no content found</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coordinate Search -->
+            <div id="searchbar" class="GeosearchBox suggestion_list_visible" *ngIf="!hideDropdown && selectDropdown == 2">
+                <div class="bar bar_no_bottom">
+                    <input type="text" id="auto" name="auto" class="input_search ng-pristine ng-valid ng-empty ng-touched as-input" 
+                           [(ngModel)]="obj.latlong" placeholder="00.00000000,00.00000000" autocomplete="off">
+                    <button *ngIf="closeLatLongButton!=1" title="Search location" class="input_search" (click)="flyToLatlong()"></button>
+                    <button *ngIf="closeLatLongButton==1" (click)="closeMarker(0)" id="serachClean" class="clean_search"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
